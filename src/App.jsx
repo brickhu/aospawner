@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { connect as aoconnect,createDataItemSigner } from "@permaweb/aoconnect/browser";
 import './App.css'
+import { useWallet } from './hooks/wallet';
+import Headers from './componnets/Header';
 
 
 const { result, results, message, spawn, monitor, unmonitor, dryrun } = aoconnect();
@@ -17,12 +19,25 @@ function App() {
   })
   const [spawns,setSpawns] = useState([])
 
-  useEffect(()=>async()=>{
-    if(!address || !connected) return
-    const ps_str = localStorage.getItem(`ps-${address}`)
-    const ps_arr = ps_str?JSON.parse(ps_str):[]
-    setSpawns(ps_arr)
-  },[address])
+  useEffect(()=>{
+    async function fetchProcess(){
+      return walletkit.getActiveAddress().then(async(active_address)=>{
+        if(!active_address) return
+        const ps_str = await localStorage.getItem(`ps-${active_address}`)
+        const ps_arr = ps_str?JSON.parse(ps_str):[]
+        console.log('ps_arr: ', ps_arr);
+        setSpawns(ps_arr)
+      })
+    }
+    if(connected){
+      fetchProcess()
+    }else{
+      setSpawns([])
+    }
+    
+  },[address,connected])
+
+
 
 
 
@@ -36,7 +51,7 @@ function App() {
     const cron_interval = formData.get("cron_interval")
     const cron_type = formData.get("cron_type")
     const cron_str = cron_interval&&cron_interval>0?`${cron_interval}-${cron_type}${cron_interval>1?'s':''}`:null
-    console.log('cron_str: ', cron_str);
+    
 
     if(!module ) {
       setTip("missed filed")
@@ -44,7 +59,6 @@ function App() {
       return
     }
     spawner({name,scheduler,module,cron_interval:cron_str}).then((pid)=>{
-      console.log(pid)
       if(pid){
         const ps_str = localStorage.getItem(`ps-${address}`)
         const ps_arr = ps_str?JSON.parse(ps_str):[]
@@ -56,12 +70,7 @@ function App() {
     })
   }
 
-  function handlerDisconnect(){
-    disconnect().then(()=>{
-      setSpawnning(false)
-      setTip(null)
-    })
-  }
+
 
   function handlerConnect(){
     if(!walletkit) return
@@ -87,8 +96,8 @@ function App() {
 
   return (
     <>
-      {/* <div>{user?.address||'null'} | <button>disconnect</button></div> */}
-      <h1 className='text-left w-full py-8'>aospawner</h1>
+      <Headers></Headers>
+
       
       {connected&&
         <div className='text-left'>
@@ -117,77 +126,18 @@ function App() {
               </select>
             </div>
             {tip&&<div>{tip}</div>}
-            <div className='flex text-right w-full justify-end p-4'><button disabled={spawnning}>{spawnning?'spawnning':'spawn'}</button></div>
+            <div className='flex text-right w-full justify-end p-4'><button className='btn' disabled={spawnning}>{spawnning?'spawnning':'spawn'}</button></div>
             
           </form>
       </div>}
 
-      {!connected&&<div><button onClick={handlerConnect}>connect</button></div>}
+      {!connected&&<div><button className='btn' onClick={handlerConnect}>connect</button></div>}
       {spawns.length>=1&&<div>
-        <h4>spawn history</h4>
-        {spawns.map((item)=><li>{item.pid}</li>)}
+        {spawns.map((item)=><li>{item.name} - {item.pid}</li>)}
       </div>}
-      {address&&<div className='fixed top-0 right-0 flex items-center	p-4 gap-4'><div>{address}</div><button onClick={handlerDisconnect}>disconnect</button></div>}
+      {/* {address&&<div className='fixed top-0 right-0 flex items-center	p-4 gap-4'><div>{address}</div><button onClick={handlerDisconnect}>disconnect</button></div>} */}
     </>
   )
 }
 
 export default App
-
-
-
-function useWallet() {
-  const arconnect = window.arweaveWallet || null
-  const [address,setAddress] = useState(null)
-  const [connected,setConnected] = useState(false)
-
-  useEffect(()=>{
-    if(!arconnect) return
-    connect()
-  },[])
-  
-  // 链接钱包函数
-  const connect = async function() {
-    try {
-      if(!arconnect) throw Error("未安装arconnect")
-      if(connected) return
-      const permissions = ["ACCESS_ADDRESS","ACCESS_PUBLIC_KEY","SIGN_TRANSACTION","DECRYPT","SIGNATURE","DISPATCH"]
-      return await arconnect.connect(permissions,{name:"aospawner"}).then(async()=>{
-        const address = await arconnect.getActiveAddress()
-        setAddress(address)
-        setConnected(true)
-        return true
-      }).catch(err=>{
-        throw Error(err)
-      })
-    } catch (error) {
-      throw Error(error)
-    }
-  }
-  
-  //断掉钱包链接
-  const disconnect = async function(){
-    try {
-      if(connected){
-        return arconnect.disconnect().then(async()=>{
-          await setConnected(false)
-          await setAddress(null)
-          return true
-        }).catch(err=>{throw Error(err)})
-      }else{
-        return false
-      }
-    } catch (error) {
-      throw Error(error)
-    }
-  }
-
-
-  return {
-    address,
-    walletkit:arconnect,
-    connected,
-    connect,
-    disconnect,
-  }
-}
