@@ -18,7 +18,7 @@ function Headers() {
     connect()
   }
   return <div className='fixed top-0 right-0 flex items-center justify-between p-4 gap-4 w-full'>
-    <div className='font-bold'>aospawner</div>
+    <div className='font-bold'>aoSpawner</div>
     <div>{connected?<div>{address} | <button onClick={handlerDisconnect}>disconnect</button></div>:<div><button onClick={handlerConnect}>connect</button></div>}</div>
   </div>
 
