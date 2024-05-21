@@ -15,7 +15,7 @@ function App() {
   const [spawnning,setSpawnning] = useState(false)
   const [fileds,setFileds] = useState({
     scheduler: "_GQ33BkPtZrqxA84vM8Zk-N2aO0toNNu_C-l-rawrBA",
-    module: "GYrbbe0VbHim_7Hi6zrOpHQXrSQz07XNtwCnfbFo2I0"
+    module: "fcoN_xJeisVsPXA-trzVAuIiqO3ydLQxM-L4XbrQKzY"
   })
   const [spawns,setSpawns] = useState([])
 
@@ -99,12 +99,12 @@ function App() {
       <Headers></Headers>
       <section className='flex w-full gap-12'>
         <div className='text-left w-[45%] flex flex-col gap-4 flex-1'>
-          <p>aoSpawner is a process manager for aoComputer that makes it easy to create, manage and monitor user processes. It is deeply integrated with web-aos and provides clear value for both developers and users:</p>
+          <p>aoSpawner is a process manager for the aoComputer that makes it easy to spawn, manage, and monitor processes. It is deeply integrated with web-aos and provides clear value for both developers and users:</p>
           <ul className='flex flex-col gap-4'>
-            <li>1.Retrieve all processes under the user's address, eliminating the hassle of forgetting process addresses;</li>
-            <li>2.View real-time status of all processes, avoiding the trouble of repeated searching and switching in aos or ao browser;</li>
-            <li>3.Integrated web version of aos allows regular users to launch aos with one click, without needing command line installation;</li>
-            <li>4.Process message push notifications make it more convenient to view historical messages and read messages;</li>
+            <li>1. Display and manage all processes under the user's address;</li>
+            <li>2. View real-time status of all processes on one page;</li>
+            <li>3. Integrated with web-aos, allowing regular users to use it without terminal and VPN issues;</li>
+            <li>4. Easy way to spawn a new process with custom modules, schedulers, and tags;</li>
           </ul>
           <i>aoComputer is a hyper-parallel, decentralized computer based on the Arweave permanent storage network.</i>
         </div>
