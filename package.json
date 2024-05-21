@@ -12,6 +12,7 @@
   "dependencies": {
     "@permaweb/aoconnect": "^0.0.53",
     "@tailwindcss/vite": "^4.0.0-alpha.15",
+    "minidenticons": "^4.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwindcss": "^4.0.0-alpha.15"

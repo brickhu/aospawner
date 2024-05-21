@@ -1953,6 +1953,11 @@ lru-cache@^5.1.1:
   dependencies:
     yallist "^3.0.2"
 
+minidenticons@^4.2.1:
+  version "4.2.1"
+  resolved "https://registry.npmjs.org/minidenticons/-/minidenticons-4.2.1.tgz#c2c3b98779e7c3aaded308bc3f123074946acb6b"
+  integrity sha512-oWfFivA0lOx/V/bO/YIJbthB26lV8JXYvhnv9zM2hNd3fzsHTXQ6c6bWZPcvhD3nnOB+lQk/D9lF43BXixrN8g==
+
 minimalistic-assert@^1.0.0:
   version "1.0.1"
   resolved "https://registry.npmjs.org/minimalistic-assert/-/minimalistic-assert-1.0.1.tgz#2e194de044626d4a10e7f7fbc00ce73e83e4d5c7"

@@ -3,7 +3,7 @@ import { connect as aoconnect,createDataItemSigner } from "@permaweb/aoconnect/b
 import './App.css'
 import { useWallet } from './hooks/wallet';
 import Headers from './componnets/Header';
-
+import History from './componnets/History';
 
 const { result, results, message, spawn, monitor, unmonitor, dryrun } = aoconnect();
 
@@ -97,44 +97,59 @@ function App() {
   return (
     <>
       <Headers></Headers>
+      <section className='flex w-full gap-12'>
+        <div className='text-left w-[45%] flex flex-col gap-4 flex-1'>
+          <p>aoSpawner is a process manager for aoComputer that makes it easy to create, manage and monitor user processes. It is deeply integrated with web-aos and provides clear value for both developers and users:</p>
+          <ul className='flex flex-col gap-4'>
+            <li>1.Retrieve all processes under the user's address, eliminating the hassle of forgetting process addresses;</li>
+            <li>2.View real-time status of all processes, avoiding the trouble of repeated searching and switching in aos or ao browser;</li>
+            <li>3.Integrated web version of aos allows regular users to launch aos with one click, without needing command line installation;</li>
+            <li>4.Process message push notifications make it more convenient to view historical messages and read messages;</li>
+          </ul>
+          <i>aoComputer is a hyper-parallel, decentralized computer based on the Arweave permanent storage network.</i>
+        </div>
+        {connected&&
+          <div className='text-left w-[45%] flex flex-col justify-start items-end'>
+            <form onSubmit={HandleSubmit}>
+              <div className='p-2 flex'>
+                <div className='w-40'>scheduler *</div>
+                <input type="text" placeholder="scheduler" name="scheduler" defaultValue={fileds?.scheduler||""} className='w-96 p-2' required></input>
+              </div>
+
+              <div className='p-2 flex'>
+                <div className='w-40'>module *</div>
+                <input type="text" placeholder="module" name="module" defaultValue={fileds?.module||"GYrbbe0VbHim_7Hi6zrOpHQXrSQz07XNtwCnfbFo2I0"} className='w-96 p-2' required></input>
+              </div>
+
+              <div className='p-2 flex'>
+                <div className='w-40'>name</div>
+                <input type="text" placeholder="name" name="name" defaultValue={fileds?.name||""} className='w-96 p-2'></input>
+              </div>
+
+              <div className='p-2 flex'>
+                <div className='w-40'>cron_interval</div>
+                <input type="number" min="1" max="59" placeholder="cron_interval" name="cron_interval" defaultValue={fileds?.cron_interval||""} className='w-60 p-2'></input>
+                <select name="cron_type" className='w-36 p-2'>
+                  <option value="second">seconds</option>
+                  <option value="minute">minutes</option>
+                </select>
+              </div>
+              {tip&&<div>{tip}</div>}
+              <div className='flex text-right w-full justify-end py-4'><button className='btn' disabled={spawnning}>{spawnning?'spawnning':'spawn'}</button></div>
+              
+            </form>
+        </div>}
+
+        {!connected&&<div><button className='btn' onClick={handlerConnect}>connect with arconnect</button></div>}
+      </section>
 
       
-      {connected&&
-        <div className='text-left'>
-          <form onSubmit={HandleSubmit}>
-            <div className='p-2 flex'>
-              <div className='w-40'>scheduler *</div>
-              <input type="text" placeholder="scheduler" name="scheduler" defaultValue={fileds?.scheduler||""} className='w-96 p-2' required></input>
-            </div>
-
-            <div className='p-2 flex'>
-              <div className='w-40'>module *</div>
-              <input type="text" placeholder="module" name="module" defaultValue={fileds?.module||"GYrbbe0VbHim_7Hi6zrOpHQXrSQz07XNtwCnfbFo2I0"} className='w-96 p-2' required></input>
-            </div>
-
-            <div className='p-2 flex'>
-              <div className='w-40'>name</div>
-              <input type="text" placeholder="name" name="name" defaultValue={fileds?.name||""} className='w-96 p-2'></input>
-            </div>
-
-            <div className='p-2 flex'>
-              <div className='w-40'>cron_interval</div>
-              <input type="number" min="1" max="59" placeholder="cron_interval" name="cron_interval" defaultValue={fileds?.cron_interval||""} className='w-60 p-2'></input>
-              <select name="cron_type" className='w-36 p-2'>
-                <option value="second">seconds</option>
-                <option value="minute">minutes</option>
-              </select>
-            </div>
-            {tip&&<div>{tip}</div>}
-            <div className='flex text-right w-full justify-end p-4'><button className='btn' disabled={spawnning}>{spawnning?'spawnning':'spawn'}</button></div>
-            
-          </form>
-      </div>}
-
-      {!connected&&<div><button className='btn' onClick={handlerConnect}>connect</button></div>}
       {spawns.length>=1&&<div>
-        {spawns.map((item)=><li>{item.name} - {item.pid}</li>)}
+        
+        <History spawns={spawns}></History>
       </div>}
+
+
       {/* {address&&<div className='fixed top-0 right-0 flex items-center	p-4 gap-4'><div>{address}</div><button onClick={handlerDisconnect}>disconnect</button></div>} */}
     </>
   )
