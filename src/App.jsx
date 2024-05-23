@@ -58,7 +58,7 @@ function App() {
       setSpawnning(false)
       return
     }
-    spawner({name,scheduler,module,cron_interval:cron_str}).then((pid)=>{
+    spawner({name,scheduler,module,cron_interval:cron_str,wallet:walletkit}).then((pid)=>{
       if(pid){
         const ps_str = localStorage.getItem(`ps-${address}`)
         const ps_arr = ps_str?JSON.parse(ps_str):[]
@@ -85,11 +85,11 @@ function App() {
     if(cron_interval){
       tags.push({name: "Cron-Interval", value: cron_interval},{name: "Cron-Tag-Action", value: "Cron"})
     }
-    console.log({module,scheduler,name,wallet,cron_interval})
+    console.log({module,scheduler,name,wallet,cron_interval,tags})
     return await spawn({
       module: module|| "GYrbbe0VbHim_7Hi6zrOpHQXrSQz07XNtwCnfbFo2I0",
       scheduler: scheduler || "_GQ33BkPtZrqxA84vM8Zk-N2aO0toNNu_C-l-rawrBA",
-      signer: createDataItemSigner(wallet || walletkit),
+      signer: createDataItemSigner(wallet),
       tags: tags
     })
   }

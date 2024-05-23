@@ -1,11 +1,11 @@
 import { useEffect,useState,useContext,createContext } from "react"
 
 export const WalletContext = createContext()
-
+const arconnect = window.arweaveWallet || null
 
 // 创建提供者组件
 export const WalletProvider = ({ children }) => {
-  const arconnect = window.arweaveWallet || null
+  
   const [address,setAddress] = useState(null)
   const [connected,setConnected] = useState(false)
   // 初始化链接

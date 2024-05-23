@@ -10,7 +10,7 @@ function History({spawns}) {
 
 
   return <div className='w-full border-t-1 mt-6'>
-    {spawns.map((item)=><HistoryItem item={item}></HistoryItem>)}
+    {spawns.map((item)=><HistoryItem item={item} key={item.pid}></HistoryItem>)}
   </div>
 
 }
@@ -19,7 +19,7 @@ export default History
 
 
 function HistoryItem({item}) {
-  return <div  className='w-full text-left py-2 flex items-center gap-4 justify-between'>
+  return <div  className='w-full text-left py-2 flex items-center gap-4 justify-between' key={item.pid}>
     <div className='w-8'><HashImage text={item.pid} className="w-6 h-6"/></div>
     <div className='w-120'>{item.pid}</div>
     <div className='flex-1 opacity-60'>{item.name || '-'}</div>
